@@ -1,1 +1,0 @@
-# itq-test-task

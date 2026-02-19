@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-add-document-number-seq
+      author: system
+      changes:
+        - createSequence:
+            sequenceName: document_number_seq
+            startValue: 1
+            incrementBy: 1

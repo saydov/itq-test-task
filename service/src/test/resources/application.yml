@@ -1,0 +1,22 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+app:
+  batch-size: 10
+  workers:
+    submit:
+      enabled: false
+      interval: 60000
+    approve:
+      enabled: false
+      interval: 60000
+
+logging:
+  level:
+    com.github.saydov: debug

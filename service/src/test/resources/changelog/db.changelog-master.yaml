@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: changeset/001-create-tables.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: changeset/002-add-document-number-seq.yaml
+      relativeToChangelogFile: true
