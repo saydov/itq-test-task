@@ -4,7 +4,6 @@ import com.github.saydov.documents.enums.DocumentAction;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.jetbrains.annotations.Contract;
 
 import java.time.LocalDateTime;
@@ -13,17 +12,16 @@ import java.util.Objects;
 @Entity
 @Table(name = "status_history")
 @Getter
-@Setter
 @NoArgsConstructor
 public class StatusHistory {
 
     @Contract("_, _, _, _ -> new")
     public static StatusHistory of(Document document, String initiator, DocumentAction action, String comment) {
         var history = new StatusHistory();
-        history.setDocument(Objects.requireNonNull(document, "document must not be null"));
-        history.setInitiator(Objects.requireNonNull(initiator, "initiator must not be null"));
-        history.setAction(Objects.requireNonNull(action, "action must not be null"));
-        history.setComment(comment);
+        history.document = Objects.requireNonNull(document, "document must not be null");
+        history.initiator = Objects.requireNonNull(initiator, "initiator must not be null");
+        history.action = Objects.requireNonNull(action, "action must not be null");
+        history.comment = comment;
         return history;
     }
 

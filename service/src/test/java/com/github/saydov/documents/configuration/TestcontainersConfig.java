@@ -1,4 +1,4 @@
-package com.github.saydov.documents;
+package com.github.saydov.documents.configuration;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;

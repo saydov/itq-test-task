@@ -1,6 +1,7 @@
 package com.github.saydov.documents;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.saydov.documents.configuration.TestcontainersConfig;
 import com.github.saydov.documents.dto.request.BatchStatusRequest;
 import com.github.saydov.documents.dto.request.CreateDocumentRequest;
 import com.github.saydov.documents.entity.ApprovalRegistry;

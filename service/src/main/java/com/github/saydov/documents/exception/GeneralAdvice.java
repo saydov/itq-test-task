@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.util.stream.Collectors;
+
 @Slf4j
 @RestControllerAdvice
 public class GeneralAdvice {
@@ -27,10 +29,10 @@ public class GeneralAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ProblemDetail handleValidation(MethodArgumentNotValidException ex) {
-        var message = ex.getBindingResult().getFieldErrors().stream()
+        var errors = ex.getBindingResult().getFieldErrors().stream()
                 .map(e -> e.getField() + ": " + e.getDefaultMessage())
-                .reduce((a, b) -> a + "; " + b)
-                .orElse("Validation failed");
+                .collect(Collectors.joining("; "));
+        var message = errors.isEmpty() ? "Validation failed" : errors;
         var problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, message);
         problem.setProperty(CODE_PROPERTY, "VALIDATION_ERROR");
         return problem;

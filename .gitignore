@@ -1,29 +1,43 @@
-### Gradle ###
-.gradle/
+.gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-### Maven (legacy) ###
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-
-### IDE ###
+### IntelliJ IDEA ###
 .idea/**
-*.iml
+.idea/libraries/
 *.iws
+*.iml
 *.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### Gradle ###
+gradle.properties
+
+### VS Code ###
 .vscode/
 
-### OS ###
+### Mac OS ###
 .DS_Store
-Thumbs.db
-
-### Lombok ###
-lombok.config
-
-### Logs ###
-*.log
-
-another/**

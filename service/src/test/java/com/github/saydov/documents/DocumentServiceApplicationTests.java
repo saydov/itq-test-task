@@ -1,5 +1,6 @@
 package com.github.saydov.documents;
 
+import com.github.saydov.documents.configuration.TestcontainersConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
