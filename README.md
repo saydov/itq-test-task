@@ -135,7 +135,9 @@ curl -X POST http://localhost:8080/api/documents/concurrency-test \
 
 | Параметр | Значение | Описание |
 |----------|---------|----------|
-| `app.transition.batch-size` | 50 | Размер пачки при обработке |
+| `app.batch-size` | 50 | Размер пачки для выборки из БД (воркеры, проверка статусов) |
+| `app.document.number-prefix` | DOC | Префикс номера документа (DOC-000001) |
+| `app.transition.batch-size` | 50 | Размер пачки при параллельной обработке транзакций |
 | `app.transition.max-concurrency` | 4 | Макс. параллельных пачек |
 | `app.workers.submit.enabled` | true | Вкл/выкл SUBMIT-воркера |
 | `app.workers.submit.interval` | 10000 | Интервал SUBMIT-воркера (мс) |
