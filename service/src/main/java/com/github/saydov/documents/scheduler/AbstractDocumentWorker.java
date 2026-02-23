@@ -1,26 +1,26 @@
 package com.github.saydov.documents.scheduler;
 
+import com.github.saydov.documents.configuration.AppProperties;
 import com.github.saydov.documents.dto.StatusChangeResult;
 import com.github.saydov.documents.service.DocumentService;
+import com.github.saydov.documents.service.transition.DocumentTransitionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 
 @Slf4j
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class AbstractDocumentWorker implements DocumentWorker {
 
     protected final DocumentService documentService;
+    protected final DocumentTransitionService transitionService;
+    private final AppProperties properties;
 
-    @Value("${app.batch-size}")
-    private int batchSize;
-
-    protected void processDocuments() {
+    protected void batchDocuments() {
         var status = getTargetStatus();
         var workerName = getClass().getSimpleName();
 
-        var ids = documentService.findIdsByStatus(status, batchSize);
+        var ids = documentService.findIdsByStatus(status, properties.getBatchSize());
         if (ids.isEmpty()) {
             return;
         }

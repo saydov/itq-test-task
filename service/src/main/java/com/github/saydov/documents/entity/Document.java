@@ -15,17 +15,15 @@ import java.util.Objects;
 @Entity
 @Table(name = "documents")
 @Getter
-@Setter
 @NoArgsConstructor
 public class Document {
 
-    @Contract("_, _, _, _ -> new")
-    public static Document of(String number, String author, String title, DocumentStatus status) {
+    @Contract("_, _, _ -> new")
+    public static Document of(String number, String author, String title) {
         var document = new Document();
-        document.setNumber(Objects.requireNonNull(number, "number must not be null"));
-        document.setAuthor(Objects.requireNonNull(author, "author must not be null"));
-        document.setTitle(Objects.requireNonNull(title, "title must not be null"));
-        document.setStatus(Objects.requireNonNull(status, "status must not be null"));
+        document.number = Objects.requireNonNull(number, "number cannot be null");
+        document.author = Objects.requireNonNull(author, "author cannot be null");
+        document.title = Objects.requireNonNull(title, "title cannot be null");
         return document;
     }
 
@@ -42,6 +40,7 @@ public class Document {
     @Column(nullable = false)
     private String title;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private DocumentStatus status = DocumentStatus.DRAFT;

@@ -18,6 +18,11 @@ spring:
 
 app:
   batch-size: 50
+  document:
+    number-prefix: DOC
+  transition:
+    batch-size: 50
+    max-concurrency: 4
   workers:
     submit:
       enabled: true

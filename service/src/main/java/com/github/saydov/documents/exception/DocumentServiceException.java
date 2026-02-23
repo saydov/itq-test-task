@@ -6,10 +6,10 @@ import org.springframework.http.HttpStatus;
 @Getter
 public abstract class DocumentServiceException extends RuntimeException {
 
-    private final HttpStatus statusCode;
+    private final HttpStatus status;
 
-    protected DocumentServiceException(HttpStatus statusCode, String message) {
+    protected DocumentServiceException(HttpStatus httpStatus, String message) {
         super(message);
-        this.statusCode = statusCode;
+        this.status = httpStatus;
     }
 }
