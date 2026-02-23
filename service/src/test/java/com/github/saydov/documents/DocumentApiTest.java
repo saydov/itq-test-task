@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saydov.documents.configuration.TestcontainersConfig;
 import com.github.saydov.documents.dto.request.BatchStatusRequest;
 import com.github.saydov.documents.dto.request.CreateDocumentRequest;
+import com.github.saydov.documents.dto.test.ConcurrencyTestRequest;
 import com.github.saydov.documents.entity.ApprovalRegistry;
 import com.github.saydov.documents.enums.DocumentAction;
 import com.github.saydov.documents.enums.DocumentStatus;
@@ -146,6 +147,29 @@ class DocumentApiTest {
     }
 
     @Test
+    @DisplayName("Массовое согласование: registry conflict для одного из batch → остальные через fallback успешны")
+    void bulkApprove_registryConflictFallback() throws Exception {
+        var id1 = createDocument("Mikhail", "Doc 1");
+        var id2 = createDocument("Bogdan", "Doc 2");
+        var id3 = createDocument("Alexey", "Doc 3");
+        submitDocuments(List.of(id1, id2, id3), "Mikhail");
+
+        var document2 = documentRepository.findById(id2).orElseThrow();
+        approvalRegistryRepository.saveAndFlush(ApprovalRegistry.of(document2, "Bogdan"));
+
+        approveDocuments(List.of(id1, id2, id3), "Reviewer")
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[0].status").value(OperationStatus.SUCCESS.name()))
+                .andExpect(jsonPath("$[1].status").value(OperationStatus.REGISTRY_ERROR.name()))
+                .andExpect(jsonPath("$[2].status").value(OperationStatus.SUCCESS.name()));
+
+        entityManager.clear();
+        assertThat(documentRepository.findById(id1).orElseThrow().getStatus()).isEqualTo(DocumentStatus.APPROVED);
+        assertThat(documentRepository.findById(id2).orElseThrow().getStatus()).isEqualTo(DocumentStatus.SUBMITTED);
+        assertThat(documentRepository.findById(id3).orElseThrow().getStatus()).isEqualTo(DocumentStatus.APPROVED);
+    }
+
+    @Test
     @DisplayName("Получение документа: 404 для несуществующего ID")
     void getDocument_notFound() throws Exception {
         mockMvc.perform(get(BASE_URL + "/{id}", NON_EXISTENT_ID))
@@ -197,6 +221,39 @@ class DocumentApiTest {
                         .param("ids", id1.toString(), id2.toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
+    }
+
+    @Test
+    @DisplayName("Конкурентное утверждение: ровно одна попытка успешна")
+    void concurrentApproval_onlyOneSucceeds() throws Exception {
+        var id = createDocument("Mikhail", "Concurrent doc");
+        submitDocuments(List.of(id), "Mikhail");
+
+        var request = ConcurrencyTestRequest.builder()
+                .id(id)
+                .threads(5)
+                .attempts(10)
+                .initiator("Reviewer")
+                .build();
+
+        var json = objectMapper.writeValueAsString(request);
+
+        var result = mockMvc.perform(post(BASE_URL + "/concurrency-test")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.totalAttempts").value(10))
+                .andExpect(jsonPath("$.successCount").value(1))
+                .andExpect(jsonPath("$.finalStatus").value(DocumentStatus.APPROVED.name()))
+                .andReturn();
+
+        var tree = objectMapper.readTree(result.getResponse().getContentAsString());
+        var conflicts = tree.get("conflictCount").asInt();
+        var errors = tree.get("errorCount").asInt();
+        assertThat(conflicts + errors).isEqualTo(9);
+
+        assertThat(approvalRegistryRepository.count()).isEqualTo(1);
     }
 
     // -- helpers --

@@ -1,5 +1,12 @@
 package com.github.saydov.documents.enums;
 
+import com.github.saydov.documents.dto.StatusTransition;
+import com.github.saydov.documents.dto.request.BatchStatusRequest;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+import java.util.function.Function;
+
 /**
  * Действия, которые можно выполнить над документом для смены его статуса.
  *
@@ -9,6 +16,8 @@ package com.github.saydov.documents.enums;
  *
  * @see DocumentStatus
  */
+@Getter
+@RequiredArgsConstructor
 public enum DocumentAction {
 
     /**
@@ -16,12 +25,15 @@ public enum DocumentAction {
      * Переводит документ из статуса {@link DocumentStatus#DRAFT}
      * в {@link DocumentStatus#SUBMITTED}.
      */
-    SUBMIT,
+    SUBMIT(StatusTransition::submit),
 
     /**
      * Согласование документа.
      * Переводит документ из статуса {@link DocumentStatus#SUBMITTED}
      * в {@link DocumentStatus#APPROVED}.
      */
-    APPROVE
+    APPROVE(StatusTransition::approve);
+
+    private final Function<BatchStatusRequest, StatusTransition> transitionFactory;
+
 }

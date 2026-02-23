@@ -1,0 +1,266 @@
+{
+  "info": {
+    "name": "Document Service API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ],
+  "item": [
+    {
+      "name": "Documents",
+      "item": [
+        {
+          "name": "Создать документ",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"author\": \"Богдан\",\n  \"title\": \"Акт приема-передачи за февраль\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/documents",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "documents"]
+            }
+          }
+        },
+        {
+          "name": "Получить документ",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/documents/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "documents", "1"]
+            }
+          }
+        },
+        {
+          "name": "Пакетное получение",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/documents/batch?ids=1,2,3",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "documents", "batch"],
+              "query": [
+                {
+                  "key": "ids",
+                  "value": "1,2,3"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Поиск документов",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/documents/search?status=DRAFT&author=Богдан&page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "documents", "search"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "DRAFT"
+                },
+                {
+                  "key": "author",
+                  "value": "Богдан"
+                },
+                {
+                  "key": "from",
+                  "value": "2025-01-01T00:00:00",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "2025-12-31T23:59:59",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Отправить на согласование",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ids\": [1, 2, 3],\n  \"initiator\": \"Петров\",\n  \"comment\": \"На проверку\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/documents/submit",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "documents", "submit"]
+            }
+          }
+        },
+        {
+          "name": "Утвердить",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ids\": [1, 2, 3],\n  \"initiator\": \"Сидоров\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/documents/approve",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "documents", "approve"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Approvals",
+      "item": [
+        {
+          "name": "Получить утверждение",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/approvals/document/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "approvals", "document", "1"]
+            }
+          }
+        },
+        {
+          "name": "Проверить статус утверждения",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/approvals/document/1/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "approvals", "document", "1", "status"]
+            }
+          }
+        },
+        {
+          "name": "Пакетная проверка статусов",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/approvals/check?ids=1,2,3",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "approvals", "check"],
+              "query": [
+                {
+                  "key": "ids",
+                  "value": "1,2,3"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Поиск утверждений",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/approvals/search?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "approvals", "search"],
+              "query": [
+                {
+                  "key": "approvedBy",
+                  "value": "Сидоров",
+                  "disabled": true
+                },
+                {
+                  "key": "from",
+                  "value": "2025-01-01T00:00:00",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "2025-12-31T23:59:59",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Отозвать утверждение",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/approvals/document/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "approvals", "document", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Concurrency Test",
+      "item": [
+        {
+          "name": "Тест конкурентного утверждения",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 1,\n  \"threads\": 5,\n  \"attempts\": 10,\n  \"initiator\": \"Михаил\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/documents/concurrency-test",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "documents", "concurrency-test"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

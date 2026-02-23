@@ -1,6 +1,6 @@
 package com.github.saydov.documents.enums;
 
-import com.github.saydov.documents.service.DocumentStateService;
+import com.github.saydov.documents.service.transition.DocumentTransitionService;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
  * через {@link #canTransitionTo(DocumentStatus)}.</p>
  *
  * @see DocumentAction
- * @see DocumentStateService
+ * @see DocumentTransitionService
  */
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)

@@ -1,8 +1,8 @@
-package com.github.saydov.documents.service;
+package com.github.saydov.documents.service.persistence;
 
+import com.github.saydov.documents.configuration.AppProperties;
 import com.github.saydov.documents.repository.DocumentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,11 +12,9 @@ public final class DocumentNumberGenerator {
     private static final String NUMBER_FORMAT = "%s-%06d";
 
     private final DocumentRepository documentRepository;
-
-    @Value("${app.document.number-prefix:DOC}")
-    private String prefix;
+    private final AppProperties properties;
 
     public String next() {
-        return NUMBER_FORMAT.formatted(prefix, documentRepository.nextDocumentNumber());
+        return NUMBER_FORMAT.formatted(properties.getDocument().numberPrefix(), documentRepository.nextDocumentNumber());
     }
 }

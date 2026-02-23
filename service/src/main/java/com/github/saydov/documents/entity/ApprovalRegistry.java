@@ -17,8 +17,8 @@ public class ApprovalRegistry {
     @Contract("_, _ -> new")
     public static ApprovalRegistry of(Document document, String approvedBy) {
         var registry = new ApprovalRegistry();
-        registry.document = Objects.requireNonNull(document, "document must not be null");
-        registry.approvedBy = Objects.requireNonNull(approvedBy, "approvedBy must not be null");
+        registry.document = Objects.requireNonNull(document, "document cannot be null");
+        registry.approvedBy = Objects.requireNonNull(approvedBy, "approvedBy cannot be null");
         return registry;
     }
 

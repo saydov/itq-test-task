@@ -18,9 +18,9 @@ public class StatusHistory {
     @Contract("_, _, _, _ -> new")
     public static StatusHistory of(Document document, String initiator, DocumentAction action, String comment) {
         var history = new StatusHistory();
-        history.document = Objects.requireNonNull(document, "document must not be null");
-        history.initiator = Objects.requireNonNull(initiator, "initiator must not be null");
-        history.action = Objects.requireNonNull(action, "action must not be null");
+        history.document = Objects.requireNonNull(document, "document cannot be null");
+        history.initiator = Objects.requireNonNull(initiator, "initiator cannot be null");
+        history.action = Objects.requireNonNull(action, "action cannot be null");
         history.comment = comment;
         return history;
     }

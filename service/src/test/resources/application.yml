@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: test
   jpa:
     hibernate:
       ddl-auto: none
@@ -8,7 +10,7 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.yaml
 
 app:
-  batch-size: 10
+  batch-size: 1000
   workers:
     submit:
       enabled: false
