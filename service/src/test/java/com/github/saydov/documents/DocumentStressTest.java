@@ -56,7 +56,7 @@ class DocumentStressTest {
         documentRepository.deleteAll();
     }
 
-    @ParameterizedTest(name = "Полный цикл DRAFT → SUBMITTED → APPROVED для {0} документов")
+    @ParameterizedTest(name = "Полный цикл DRAFT -> SUBMITTED → APPROVED для {0} документов")
     @ValueSource(ints = {5_000, 10_000, 50_000})
     @Timeout(value = 5, unit = TimeUnit.MINUTES)
     void fullCycle(int count) {
@@ -73,7 +73,7 @@ class DocumentStressTest {
             softly.assertThat(submitResults).allMatch(StatusChangeResult::isSuccess);
         });
 
-        List<StatusChangeResult> approveResults = timed(watch, "approve",
+        var approveResults = timed(watch, "approve",
                 () -> transitionService.execute(DocumentAction.APPROVE, new BatchStatusRequest(ids, INITIATOR, null)));
 
         assertSoftly(softly -> {
